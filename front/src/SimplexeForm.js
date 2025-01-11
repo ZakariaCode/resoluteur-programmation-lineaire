@@ -2,30 +2,37 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const SimplexForm = () => {
-  const [c, setC] = useState([3, 5]);
-  const [A, setA] = useState([[1, 0], [0, 2], [3, 2]]);
-  const [b, setB] = useState([4, 12, 18]);
+  const [c, setC] = useState([]);
+  const [A, setA] = useState([]);
+  const [b, setB] = useState([]);
   const [isMinimization, setIsMinimization] = useState(false);
-  const [method, setMethod] = useState('simplex');
+  const [method, setMethod] = useState('simplex');  
   const [solution, setSolution] = useState(null);
   const [optimalValue, setOptimalValue] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
+    setError(null);  
+    const url = method === 'simplex' ? 'http://127.0.0.1:5000/simplex' : 'http://127.0.0.1:5000/simplex_two_phases'; 
 
     try {
-      const response = await axios.post('http://127.0.0.1:5000/simplex_auto', {
+      const response = await axios.post(url, {
         c: c,
         A: A,
         b: b,
         is_minimization: isMinimization,
         method: method
       });
+
       setSolution(response.data.solution);
       setOptimalValue(response.data.optimal_value);
     } catch (err) {
       setError(err.response ? err.response.data.error : 'Erreur inconnue');
+    } finally {
+      setLoading(false);  
     }
   };
 
@@ -54,7 +61,7 @@ const SimplexForm = () => {
                 className="px-4 py-2 border rounded-md text-gray-700"
               >
                 <option value="simplex">Simplex</option>
-                <option value="big_m">Big M</option>
+                <option value="simplex_two_phases">Simplex à deux phases</option>
               </select>
             </div>
 
@@ -65,7 +72,7 @@ const SimplexForm = () => {
                 value={c.join(', ')}
                 onChange={(e) => setC(e.target.value.split(',').map(Number))}
                 className="w-full px-4 py-2 border rounded-md"
-                placeholder="Exemple: 3, 5"
+                placeholder="Entrez les coefficients de la fonction objectif, par exemple : 3, 5"
               />
             </div>
 
@@ -76,14 +83,14 @@ const SimplexForm = () => {
                 value={A.map(row => row.join(', ')).join('; ')}
                 onChange={(e) => setA(e.target.value.split(';').map(row => row.split(',').map(Number)))}
                 className="w-full px-4 py-2 border rounded-md"
-                placeholder="Exemple: 1, 0; 0, 2; 3, 2"
+                placeholder="Entrez les coefficients de A, par exemple : 1, 0; 0, 2; 3, 2"
               />
               <input
                 type="text"
                 value={b.join(', ')}
                 onChange={(e) => setB(e.target.value.split(',').map(Number))}
                 className="w-full mt-4 px-4 py-2 border rounded-md"
-                placeholder="Exemple: 4, 12, 18"
+                placeholder="Entrez les valeurs de b, par exemple : 4, 12, 18"
               />
             </div>
           </div>
@@ -91,8 +98,9 @@ const SimplexForm = () => {
           <button
             type="submit"
             className="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none"
+            disabled={loading}  
           >
-            Résoudre
+            {loading ? 'Chargement...' : 'Résoudre'}
           </button>
         </form>
 
