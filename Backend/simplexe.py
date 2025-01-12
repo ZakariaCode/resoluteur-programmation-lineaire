@@ -35,4 +35,6 @@ def simplex(c, A, b, is_minimization=False):
             solution[i] = tableau[row, -1]
 
     optimal_value = tableau[-1, -1]
-    return solution, - optimal_value
+    if is_minimization==False:
+        optimal_value = -optimal_value
+    return solution, optimal_value
