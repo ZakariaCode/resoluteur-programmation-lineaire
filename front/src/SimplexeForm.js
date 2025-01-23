@@ -28,10 +28,10 @@ const SimplexForm = () => {
 
   const handleAChange = (e, rowIndex, colIndex) => {
     const newA = [...A];
-    const newRow = [...newA[rowIndex]]; // Clone the row
-    newRow[colIndex] = Number(e.target.value); // Update only the targeted cell
-    newA[rowIndex] = newRow; // Replace the modified row in the matrix
-    setA(newA); // Update the state with the new matrix
+    const newRow = [...newA[rowIndex]];
+    newRow[colIndex] = Number(e.target.value); 
+    newA[rowIndex] = newRow; 
+    setA(newA); 
   };
 
   const handleBChange = (e, index) => {
