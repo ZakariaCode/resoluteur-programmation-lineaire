@@ -23,9 +23,7 @@ L'interface est conçue pour être simple et intuitive. Elle permet à l'utilisa
 ## Aperçu de l'application
 
 ![Interface Utilisateur](front/public/r1.png)
-![Résultat](path/to/r2.png)
-![Résultat](path/to/r3.png)
-![Résultat](path/to/r4.png)
-![Résultat](path/to/r5.png)
-
-
+![Résultat 1](path/to/r2.png)
+![Résultat 2](path/to/r3.png)
+![Résultat 3](path/to/r4.png)
+![Résultat 4](path/to/r5.png)
